@@ -32,14 +32,23 @@
 
 // ------------------------------------------------------------------------------------------------
 
+#let myslide(body) = {
+  slide[
+    #set text(size: 22pt)
+    #body
+  ]
+}
+
+// ------------------------------------------------------------------------------------------------
+
 #show: clean-theme.with(
   footer: text(fill: ul_red, weight: "semibold")[Safety. Science. Transformation.™],
-  short-title: [Intro to typst],
-  logo: image("UL_Logo.png"),
+  short-title: [Intro to TYPST],
+  logo: image("media/UL_Logo.png"),
   color: ul_red
 )
 
-#show "typst": it => {
+#show "TYPST": it => {
   set text(font: "Verdana", weight: "semibold", fill: typst_turquoise)
   [typst]
 }
@@ -64,27 +73,30 @@
 #show raw.where(lang: "typ-show"): it => {
   grid(
     columns: (1fr, 1fr),
-    align: (center, left),
+    align: (center, center),
     raw(align: start, block: true, it.text, lang: "typ"),
-    rect(radius: 10pt, inset: 25pt, eval(it.text, mode: "markup"))
+    rect(radius: 10pt, inset: 15pt, [
+      #set text(size: 16pt)
+      #set align(start)
+      #eval(it.text, mode: "markup")])
   )
 }
 
 #show heading.where(level: 2): it => {
   stack(
     it,
-    v(1em)
+    v(0.75em)
   )
 }
 
 // ------------------------------------------------------------------------------------------------
 
-#set text(font: "Arial") // changing font size won't affect slides
+#set text(font: "Arial") // changing font size won't affect slides...
 
 // ------------------------------------------------------------------------------------------------
 
 #title-slide(
-  title: "typst",
+  title: "TYPST",
   subtitle: "An Introduction",
   authors: "Jörg Planner",
   date: datetime.today().display(),
@@ -94,55 +106,92 @@
 
 #new-section-slide[Installation & Setup]
 
-#slide[
-  ```typ-show
-  #set text(fill: blue)
-  I'm blue
-  ```
-]
-
-#slide[
-  #align(horizon)[why is this not on horizon?]
-]
-
-#slide[
+#myslide[
   == 1. Installation
 
-
-  #align(horizon)[We are going to install typst with `winget`:]
+  To install typst we will just use `winget`:
 
   ```shell
   C:\Users\26383> winget install --id Typst.Typst
   ```
+
+  Now you can already create your first typst file `file.typ` and compile it:
+
+  ```shell
+  C:\Users\26383> echo Hello World > first.typ
+  C:\Users\26383> typst compile first.typ
+  ```
 ]
 
-#slide[
+#myslide[
   == 2. VS Code Setup
-
-  Just install typst LSP
-
-  TODO
+  // #box(baseline: 25%, image("media/Typst_LSP.png"))
+  #only(1)[
+    For a nicer experience VS Code offers the "Typst LSP" extension:
+    #scale(x: 80%, y: 80%, reflow: true, image("media/VSCode_Tooltip.png"))
+  ]
+  #only(2)[
+    Another extension we probably want is "vscode-pdf" to view the compiled pdf directly in VS Code.
+  ]
 ]
 
-#new-section-slide[The Basics]
+#new-section-slide[Basics]
 
-#slide[
-  == Text
+#myslide[
+  == Simple Text
 
   ```typ-show
-  Just writing text
+  = Heading Level 1
+  This is just text.
 
-  + lists
-  + with
-  + items
+  == Heading Level 2
+  An enumeration:
+  + basic formattings:
+    - _italic_
+    - *bold*
+  + `raw text`
   ```
+]
+
+#myslide[
+  == Set Rules
+]
+
+#myslide[
+  == Show Rules
 ]
 
 #new-section-slide[Scripting]
 
-#new-section-slide[The Docs]
+#myslide[
+  == Types of Blocks
+]
+
+#myslide[
+  == Conditionals
+]
+
+#myslide[
+  == Loops
+]
+
+#new-section-slide[Other]
+
+#myslide[
+  == Grid
+]
+
+#myslide[
+  == Stack
+]
+
+#myslide[
+  == Spacing
+]
+
+#new-section-slide[Documentation]
 
 #focus-slide(background: ul_red)[
   #set align(center)
-  Live Demo!
+  Live Demo Time!
 ]

@@ -49,6 +49,18 @@
 ]
 
 #slide[
+  == 2. VS Code Setup
+
+  #alternatives[
+    For a nicer experience VS Code offers the "Typst LSP" extension:
+
+    #image("media/VSCode_Tooltip.png")
+  ][
+    Another extension we probably want is "vscode-pdf" to view the compiled pdf directly in VS Code.
+  ]
+]
+
+#slide[
   ```typ-show
   #set text(fill: blue)
   I'm blue
