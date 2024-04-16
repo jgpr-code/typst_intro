@@ -76,7 +76,7 @@
     align: (center, center),
     raw(align: start, block: true, it.text, lang: "typ"),
     rect(radius: 10pt, inset: 15pt, [
-      #set text(size: 16pt)
+      #set text(font: "Arial", size: 16pt)
       #set align(start)
       #eval(it.text, mode: "markup")])
   )
@@ -124,22 +124,25 @@
 ]
 
 #myslide[
-  == 2. VS Code Setup
-  // #box(baseline: 25%, image("media/Typst_LSP.png"))
-  #only(1)[
-    For a nicer experience VS Code offers the "Typst LSP" extension:
-    #scale(x: 80%, y: 80%, reflow: true, image("media/VSCode_Tooltip.png"))
-  ]
-  #only(2)[
-    Another extension we probably want is "vscode-pdf" to view the compiled pdf directly in VS Code.
-  ]
+  == 2. VS Code Extensions
+
+  I recommend using VS Code and installing the following extensions:
+  #grid(
+    columns: (1fr, 1fr),
+    align: (center, center),
+    [
+      #scale(x: 150%, y: 150%, reflow: true, image("media/Typst_LSP.png"))
+    ],
+    [
+      #scale(x: 150%, y: 150%, reflow: true, image("media/VSCode_Pdf.png"))
+    ]
+  )
 ]
 
 #new-section-slide[Basics]
 
 #myslide[
   == Simple Text
-
   ```typ-show
   = Heading Level 1
   This is just text.
@@ -149,49 +152,199 @@
   + basic formattings:
     - _italic_
     - *bold*
-  + `raw text`
+  + /* comment */ 2nd item // comment
   ```
 ]
 
 #myslide[
   == Set Rules
+  ```typ-show
+  Set rules allow change of style.
+
+  #set text(font: "Consolas")
+  Now all text has different font
+
+  #set align(center)
+  #set text(
+    size: 18pt,
+    fill: red,
+    weight: "semibold")
+  Text has many options!
+  ```
 ]
 
 #myslide[
   == Show Rules
+  ```typ-show
+  Show rules allow further customizations:
+  #show "difficult": "easy"
+  #show heading.where(
+    level: 3): set text(blue)
+  #show heading: it => [
+    #set align(center)
+    #underline(it.body)
+  ]
+  #show: it => {rect(inset: 10pt, it)}
+  == Typst is difficult
+  === Show rules are difficult
+  ```
 ]
 
 #new-section-slide[Scripting]
 
 #myslide[
   == Types of Blocks
+  ```typ-show
+  + \[ \] is used for content
+  + \# and \{ \} is used for code
+
+  For example:
+
+  #let a = [Content block]
+  #{
+    let b = [ is the default]
+    a + b
+  }
+  ```
 ]
 
 #myslide[
-  == Conditionals
+  == Variables and Conditionals
+  #only(1)[
+    ```typ-show
+    #let subject = [Typst] // a variable
+    #let listener = 10
+    #let audience = if listener > 10 [
+      Best
+    ] else {
+      [Greatest]
+    }
+    This talk is about #subject.\
+    Its audience is the *#audience*!
+    ```
+  ]
+  #only(2)[
+    ```typ-show
+    #let subject = [Typst] // a variable
+    #let listeners = 25 // more listeners!
+    #let audience = if listeners > 10 [
+      Best
+    ] else {
+      [Greatest]
+    }
+    This talk is about #subject.\
+    Its audience is the *#audience*!
+    ```
+  ]
 ]
 
 #myslide[
-  == Loops
+  == Arrays, Dictionaries and Loops
+  ```typ-show
+  #let arr = (1, 2, 3)
+  #let dict = (
+    first: "Hello",
+    second: "World",
+  )
+  #for i in arr [
+    #i
+  ]\
+  #for (key, val) in dict [
+    #key: #val\
+  ]
+  ```
+]
+
+#myslide[
+  == Functions
+  ```typ-show
+  #let add(x, y) = {x + y}
+  #add(2, 3)
+  #let alert(fill: red, body) = {
+    set text(white)
+    rect(fill: fill, [*Warning*\ #body])
+  }
+  #alert[Functions]
+  #alert("Functions")
+  #alert(fill: blue)[Overwritten]
+  ```
+  // sinks and spreads
+]
+
+#myslide[
+  == Sinks and Spreading
+  ```typ-show
+  // variable number of arguments
+  #let separate_words(sep, ..words) = {
+    let words_array = words.pos()
+    for word in words_array.intersperse(sep) [
+      #word
+    ]
+  }
+  #let fruits = ("Apple", "Banana", "Cherry")
+  // pass array as individual arguments
+  #separate_words("|", ..fruits)
+  ```
 ]
 
 #new-section-slide[Other]
 
 #myslide[
-  == Grid
-]
-
-#myslide[
-  == Stack
-]
-
-#myslide[
   == Spacing
+  ```typ-show
+  We can use `#h`#h(15pt) for horizontal and
+  `#v`#v(10pt)
+  for vertical spacings
+
+  Percentages or fractions are also a cool way
+  #v(10%)
+  to #h(1fr) divide #h(2fr) the
+  #v(10%)
+  space
+  ```
 ]
 
-#new-section-slide[Documentation]
+#myslide[
+  == Grid
+  ```typ-show
+  #let rects = (aqua, orange, blue, aqua).map(
+    it => rect(width: 100%, fill: it))
+  #grid(
+    columns: (1fr, 2fr, 3fr),
+    column-gutter: 2pt, row-gutter: 2pt,
+    grid.cell(
+      x: 0, y: 1, colspan: 2,
+      rect(width: 100%, fill: orange)
+    ),
+    ..rects
+  )
+  ```
+]
+
+#myslide[
+  == Colors
+  ```typ-show
+  #let ul = rgb("#ca0123")
+  #let typst = rgb("#239dae")
+  #let gradient = gradient.linear(
+    dir: ttb, ul, yellow, typst
+  )
+  #set align(center)
+  #set text(size: 50pt, fill: gradient)
+  #stack(spacing: 10pt)[Colors][♥❤♥][Typst]
+
+  ```
+]
+
+#new-section-slide[
+  #link("https://typst.app/docs/reference")[Documentation]\
+  &\
+  Live Demo
+]
+
+#new-section-slide[Questions?]
 
 #focus-slide(background: ul_red)[
   #set align(center)
-  Live Demo Time!
+  The END
 ]
