@@ -24,14 +24,14 @@
 // #show: clean-theme.with(
 //   footer: text(fill: ul_red, weight: "semibold")[Safety. Science. Transformation.™],
 //   short-title: [Intro to TYPST],
-//   logo: image("media/UL_Logo.png"),
+//   logo: image("media_private/UL_Logo.png"),
 //   color: ul_red
 // )
 
 #show: clean-theme.with(
   footer: text(fill: typst_turquoise, weight: "semibold")[\#SWEC24],
   short-title: [Intro to TYPST],
-  logo: image("media/Typst_Logo.png"),
+  // logo: image("media/Typst_Logo.png"),
   color: typst_turquoise
 )
 
@@ -71,7 +71,7 @@
   title: "TYPST",
   subtitle: "An Introduction",
   authors: "Jörg Planner",
-  date: datetime.today().display(),
+  date: datetime(year: 2024, month: 5, day: 4).display(),
   watermark: [],
   secondlogo: []
 )
@@ -301,8 +301,3 @@
 ]
 
 #new-section-slide[Questions?]
-
-#focus-slide(background: ul_red)[
-  #set align(center)
-  The END
-]
