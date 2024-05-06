@@ -1,51 +1,38 @@
-// what are my goals for this presentation?
-// - get everyone to make their first document with typst
-// - explain the most basic concepts # [] {}
-// - show how to use the great documentation
-// - a small exercise
-// - just do some live navigation of important concepts in the doc and explain them
-// - grid, stack, v, h
-// (- explain how this presentation itself was made using typst)
-
-// idea make a slide that shows itself but smaller (is this possible?)
-// idea randomly insert memes between every other slide (probably not a good idea lol) -> no random as of yet so don't do this
-
-// Agenda
-
-// 0. What ist Typst (compare with Latex maybe)
-// 1. How to install tpyst
-// 2. Basics (tpying, set rules, show rules)
-// 3. Some useful basics that I have already used (grid, stack, v, h)
-// 3. Scripting (if for [] {} functions, arrays, dicts)
-// 4. The docs
-// 5. Small exercise (I will do it live as well)
-// 6. Live explanation of presentation code
-
 #import "@preview/polylux:0.3.1": *
 #import themes.clean: *
 
 // ------------------------------------------------------------------------------------------------
 
-// define some standard colors
 #let ul_red = rgb("#ca0123")
 #let typst_turquoise = rgb("#239dae")
 
-// ------------------------------------------------------------------------------------------------
+#set text(font: "Arial") // changing font size won't affect slides...
 
-#let myslide(body) = {
+#let myslide(title, body) = {
   slide[
-    #set text(size: 22pt)
+    #stack(
+      heading(level: 2, title),
+      v(0.25em)
+    )
+    #set text(size: 22pt) // here it will affect the slides though
     #body
   ]
 }
 
 // ------------------------------------------------------------------------------------------------
 
+// #show: clean-theme.with(
+//   footer: text(fill: ul_red, weight: "semibold")[Safety. Science. Transformation.™],
+//   short-title: [Intro to TYPST],
+//   logo: image("media/UL_Logo.png"),
+//   color: ul_red
+// )
+
 #show: clean-theme.with(
-  footer: text(fill: ul_red, weight: "semibold")[Safety. Science. Transformation.™],
+  footer: text(fill: typst_turquoise, weight: "semibold")[\#SWEC24],
   short-title: [Intro to TYPST],
-  logo: image("media/UL_Logo.png"),
-  color: ul_red
+  logo: image("media/Typst_Logo.png"),
+  color: typst_turquoise
 )
 
 #show "TYPST": it => {
@@ -53,8 +40,6 @@
   [typst]
 }
 
-// Display inline code in a small box
-// that retains the correct baseline.
 #show raw.where(block: false): box.with(
   fill: luma(240),
   inset: (x: 3pt, y: 0pt),
@@ -62,8 +47,6 @@
   radius: 2pt,
 )
 
-// Display block code in a larger block
-// with more padding.
 #show raw.where(block: true): block.with(
   fill: luma(240),
   inset: 10pt,
@@ -75,23 +58,12 @@
     columns: (1fr, 1fr),
     align: (center, center),
     raw(align: start, block: true, it.text, lang: "typ"),
-    rect(radius: 10pt, inset: 15pt, [
-      #set text(font: "Arial", size: 16pt)
-      #set align(start)
-      #eval(it.text, mode: "markup")])
+    rect(radius: 10pt, inset: 15pt, {
+      set text(font: "Arial", size: 16pt)
+      set align(start)
+      eval(it.text, mode: "markup")})
   )
 }
-
-#show heading.where(level: 2): it => {
-  stack(
-    it,
-    v(0.75em)
-  )
-}
-
-// ------------------------------------------------------------------------------------------------
-
-#set text(font: "Arial") // changing font size won't affect slides...
 
 // ------------------------------------------------------------------------------------------------
 
@@ -106,9 +78,7 @@
 
 #new-section-slide[Installation & Setup]
 
-#myslide[
-  == 1. Installation
-
+#myslide("Installation")[
   To install typst we will just use `winget`:
 
   ```shell
@@ -123,9 +93,7 @@
   ```
 ]
 
-#myslide[
-  == 2. VS Code Extensions
-
+#myslide("VS Code Extensions")[
   I recommend using VS Code and installing the following extensions:
   #grid(
     columns: (1fr, 1fr),
@@ -141,11 +109,10 @@
 
 #new-section-slide[Basics]
 
-#myslide[
-  == Simple Text
+#myslide("Simple Text")[
   ```typ-show
   = Heading Level 1
-  This is just text.
+  Just text.\ \\ forces a linebreak
 
   == Heading Level 2
   An enumeration:
@@ -156,8 +123,7 @@
   ```
 ]
 
-#myslide[
-  == Set Rules
+#myslide("Set Rules")[
   ```typ-show
   Set rules allow change of style.
 
@@ -173,27 +139,54 @@
   ```
 ]
 
-#myslide[
-  == Show Rules
+#myslide("Show Rules")[
   ```typ-show
   Show rules allow further customizations:
   #show "difficult": "easy"
-  #show heading.where(
-    level: 3): set text(blue)
-  #show heading: it => [
+  #show heading: heading => [
     #set align(center)
-    #underline(it.body)
+    #underline(heading.body)
   ]
+  #show heading.where(level: 3): set text(red)
   #show: it => {rect(inset: 10pt, it)}
   == Typst is difficult
   === Show rules are difficult
+  #lorem(20)
   ```
 ]
 
 #new-section-slide[Scripting]
 
-#myslide[
-  == Types of Blocks
+#myslide("Variables and Conditionals")[
+  #only(1)[
+    ```typ-show
+    #let subject = [Typst] // a variable
+    #let listeners = 10
+    #let audience = if listeners > 10 {
+      [the *Best*]
+    } else {
+      [very good]
+    }
+    This talk is about #subject.\
+    Its audience is #audience!
+    ```
+  ]
+  #only(2)[
+    ```typ-show
+    #let subject = [Typst] // a variable
+    #let listeners = 25 // now more!
+    #let audience = if listeners > 10 {
+      [the *Best*]
+    } else {
+      [very good]
+    }
+    This talk is about #subject.\
+    Its audience is #audience!
+    ```
+  ]
+]
+
+#myslide("Types of Blocks")[
   ```typ-show
   + \[ \] is used for content
   + \# and \{ \} is used for code
@@ -201,6 +194,7 @@
   For example:
 
   #let a = [Content block]
+  // #{ to start a code block
   #{
     let b = [ is the default]
     a + b
@@ -208,55 +202,23 @@
   ```
 ]
 
-#myslide[
-  == Variables and Conditionals
-  #only(1)[
-    ```typ-show
-    #let subject = [Typst] // a variable
-    #let listener = 10
-    #let audience = if listener > 10 [
-      Best
-    ] else {
-      [Greatest]
-    }
-    This talk is about #subject.\
-    Its audience is the *#audience*!
-    ```
-  ]
-  #only(2)[
-    ```typ-show
-    #let subject = [Typst] // a variable
-    #let listeners = 25 // more listeners!
-    #let audience = if listeners > 10 [
-      Best
-    ] else {
-      [Greatest]
-    }
-    This talk is about #subject.\
-    Its audience is the *#audience*!
-    ```
-  ]
-]
-
-#myslide[
-  == Arrays, Dictionaries and Loops
+#myslide("Arrays, Dictionaries and Loops")[
   ```typ-show
   #let arr = (1, 2, 3)
   #let dict = (
     first: "Hello",
     second: "World",
   )
-  #for i in arr [
-    #i
-  ]\
+  #for i in arr {
+    [#i]
+  }\
   #for (key, val) in dict [
-    #key: #val\
-  ]
+    #key: #val
+  ] // newlines in content block -> space 🙁
   ```
 ]
 
-#myslide[
-  == Functions
+#myslide("Functions")[
   ```typ-show
   #let add(x, y) = {x + y}
   #add(2, 3)
@@ -268,19 +230,18 @@
   #alert("Functions")
   #alert(fill: blue)[Overwritten]
   ```
-  // sinks and spreads
 ]
 
-#myslide[
-  == Sinks and Spreading
+#myslide("Sinks and Spreading")[
   ```typ-show
   // variable number of arguments
   #let separate_words(sep, ..words) = {
     let words_array = words.pos()
-    for word in words_array.intersperse(sep) [
-      #word
-    ]
+    for word in words_array.intersperse(sep) {
+      [#word]
+    }
   }
+  #separate_words("~", "a", "b", "c", "d")\
   #let fruits = ("Apple", "Banana", "Cherry")
   // pass array as individual arguments
   #separate_words("|", ..fruits)
@@ -289,8 +250,7 @@
 
 #new-section-slide[Other]
 
-#myslide[
-  == Spacing
+#myslide("Spacing")[
   ```typ-show
   We can use `#h`#h(15pt) for horizontal and
   `#v`#v(10pt)
@@ -304,14 +264,13 @@
   ```
 ]
 
-#myslide[
-  == Grid
+#myslide("Grid")[
   ```typ-show
   #let rects = (aqua, orange, blue, aqua).map(
     it => rect(width: 100%, fill: it))
   #grid(
-    columns: (1fr, 2fr, 3fr),
-    column-gutter: 2pt, row-gutter: 2pt,
+    columns: (1fr, 2fr, 1fr),
+    column-gutter: 4pt, row-gutter: 2pt,
     grid.cell(
       x: 0, y: 1, colspan: 2,
       rect(width: 100%, fill: orange)
@@ -321,8 +280,7 @@
   ```
 ]
 
-#myslide[
-  == Colors
+#myslide("Colors")[
   ```typ-show
   #let ul = rgb("#ca0123")
   #let typst = rgb("#239dae")
