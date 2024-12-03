@@ -3,10 +3,15 @@
 
 // ------------------------------------------------------------------------------------------------
 
-#let ul_red = rgb("#ca0123")
-#let typst_turquoise = rgb("#239dae")
+#let UL_RED = rgb("#ca0123")
+#let UL_BRANDED = true
+#let TYPST_TURQUOISE = rgb("#239dae")
+#let PRESENT_DATE = datetime(year: 2024, month: 12, day: 6).display()
+#let SHOW_INSTALLATION = false
 
-#set text(font: "Arial") // changing font size won't affect slides...
+#set text(font: "Arial", size: 22pt)
+#set page(paper: "presentation-4-3")
+// #set page(paper: "presentation-16-9")
 
 #let myslide(title, body) = {
   slide[
@@ -14,29 +19,30 @@
       heading(level: 2, title),
       v(0.25em)
     )
-    #set text(size: 22pt) // here it will affect the slides though
     #body
   ]
 }
 
 // ------------------------------------------------------------------------------------------------
 
-// #show: clean-theme.with(
-//   footer: text(fill: ul_red, weight: "semibold")[Safety. Science. Transformation.™],
-//   short-title: [Intro to TYPST],
-//   logo: image("media_private/UL_Logo.png"),
-//   color: ul_red
-// )
-
-#show: clean-theme.with(
-  footer: text(fill: typst_turquoise, weight: "semibold")[\#SWEC24],
-  short-title: [Intro to TYPST],
-  // logo: image("media/Typst_Logo.png"),
-  color: typst_turquoise
-)
+#if UL_BRANDED {
+  show: clean-theme.with(
+    footer: text(fill: UL_RED, weight: "semibold")[Safety. Science. Transformation.™],
+    short-title: [Intro to TYPST],
+    logo: image("media_private/UL_Logo.png"),
+    color: UL_RED
+  )
+} else {
+  show: clean-theme.with(
+    footer: text(fill: TYPST_TURQUOISE, weight: "semibold")[\#SWEC24],
+    short-title: [Intro to TYPST],
+    // logo: image("media/Typst_Logo.png"),
+    color: TYPST_TURQUOISE
+  )
+}
 
 #show "TYPST": it => {
-  set text(font: "Verdana", weight: "semibold", fill: typst_turquoise)
+  set text(font: "Verdana", weight: "semibold", fill: TYPST_TURQUOISE)
   [typst]
 }
 
@@ -71,41 +77,43 @@
   title: "TYPST",
   subtitle: "An Introduction",
   authors: "Jörg Planner",
-  date: datetime(year: 2024, month: 5, day: 4).display(),
+  date: PRESENT_DATE,
   watermark: [],
   secondlogo: []
 )
 
-#new-section-slide[Installation & Setup]
+#if SHOW_INSTALLATION {
+  new-section-slide[Installation & Setup]
 
-#myslide("Installation")[
-  To install typst we will just use `winget`:
+  myslide("Installation")[
+    To install typst we will just use `winget`:
 
-  ```shell
-  C:\Users\26383> winget install --id Typst.Typst
-  ```
+    ```shell
+    C:\Users\26383> winget install --id Typst.Typst
+    ```
 
-  Now you can already create your first typst file `file.typ` and compile it:
+    Now you can already create your first typst file `file.typ` and compile it:
 
-  ```shell
-  C:\Users\26383> echo Hello World > first.typ
-  C:\Users\26383> typst compile first.typ
-  ```
-]
+    ```shell
+    C:\Users\26383> echo Hello World > first.typ
+    C:\Users\26383> typst compile first.typ
+    ```
+  ]
 
-#myslide("VS Code Extensions")[
-  I recommend using VS Code and installing the following extensions:
-  #grid(
-    columns: (1fr, 1fr),
-    align: (center, center),
-    [
-      #scale(x: 150%, y: 150%, reflow: true, image("media/Typst_LSP.png"))
-    ],
-    [
-      #scale(x: 150%, y: 150%, reflow: true, image("media/VSCode_Pdf.png"))
-    ]
-  )
-]
+  myslide("VS Code Extensions")[
+    I recommend using VS Code and installing the following extensions:
+    #grid(
+      columns: (1fr, 1fr),
+      align: (center, center),
+      [
+        #scale(x: 150%, y: 150%, reflow: true, image("media/Typst_LSP.png"))
+      ],
+      [
+        #scale(x: 150%, y: 150%, reflow: true, image("media/VSCode_Pdf.png"))
+      ]
+    )
+  ]
+}
 
 #new-section-slide[Basics]
 
@@ -135,6 +143,7 @@
     size: 18pt,
     fill: red,
     weight: "semibold")
+
   Text has many options!
   ```
 ]
@@ -149,6 +158,7 @@
   ]
   #show heading.where(level: 3): set text(red)
   #show: it => {rect(inset: 10pt, it)}
+
   == Typst is difficult
   === Show rules are difficult
   #lorem(20)
@@ -167,6 +177,7 @@
     } else {
       [very good]
     }
+
     This talk is about #subject.\
     Its audience is #audience!
     ```
@@ -180,6 +191,7 @@
     } else {
       [very good]
     }
+
     This talk is about #subject.\
     Its audience is #audience!
     ```
@@ -211,21 +223,23 @@
   )
   #for i in arr {
     [#i]
-  }\
+  }\ // \ for newline
   #for (key, val) in dict [
     #key: #val
-  ] // newlines in content block -> space 🙁
+  ] // content block newline -> space 🙁
   ```
 ]
 
 #myslide("Functions")[
   ```typ-show
   #let add(x, y) = {x + y}
-  #add(2, 3)
+
   #let alert(fill: red, body) = {
     set text(white)
     rect(fill: fill, [*Warning*\ #body])
   }
+
+  #add(2, 3)
   #alert[Functions]
   #alert("Functions")
   #alert(fill: blue)[Overwritten]
@@ -236,13 +250,14 @@
   ```typ-show
   // variable number of arguments
   #let separate_words(sep, ..words) = {
-    let words_array = words.pos()
-    for word in words_array.intersperse(sep) {
+    let w_array = words.pos()
+    for word in w_array.intersperse(sep) {
       [#word]
     }
   }
-  #separate_words("~", "a", "b", "c", "d")\
-  #let fruits = ("Apple", "Banana", "Cherry")
+  #separate_words("~", "a", "b", "c", "d")
+
+  #let fruits = ("Apple", "Banana", "Fig")
   // pass array as individual arguments
   #separate_words("|", ..fruits)
   ```
@@ -252,11 +267,11 @@
 
 #myslide("Spacing")[
   ```typ-show
-  We can use `#h`#h(15pt) for horizontal and
-  `#v`#v(10pt)
+  Use `#h` #h(15pt) for horizontal and `#v`
+  #v(10pt)
   for vertical spacings
 
-  Percentages or fractions are also a cool way
+  Percentages or fractions are a cool way
   #v(10%)
   to #h(1fr) divide #h(2fr) the
   #v(10%)
@@ -268,6 +283,7 @@
   ```typ-show
   #let rects = (aqua, orange, blue, aqua).map(
     it => rect(width: 100%, fill: it))
+
   #grid(
     columns: (1fr, 2fr, 1fr),
     column-gutter: 4pt, row-gutter: 2pt,
@@ -289,6 +305,7 @@
   )
   #set align(center)
   #set text(size: 50pt, fill: gradient)
+
   #stack(spacing: 10pt)[Colors][♥❤♥][Typst]
 
   ```
