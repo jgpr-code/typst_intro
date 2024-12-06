@@ -4,14 +4,14 @@
 // ------------------------------------------------------------------------------------------------
 
 #let UL_RED = rgb("#ca0123")
-#let UL_BRANDED = true
+#let UL_BRANDED = false
 #let TYPST_TURQUOISE = rgb("#239dae")
 #let PRESENT_DATE = datetime(year: 2024, month: 12, day: 6).display()
 #let SHOW_INSTALLATION = false
 
 #set text(font: "Arial", size: 22pt)
-#set page(paper: "presentation-4-3")
-// #set page(paper: "presentation-16-9")
+// #set page(paper: "presentation-4-3")
+#set page(paper: "presentation-16-9")
 
 #let myslide(title, body) = {
   slide[
