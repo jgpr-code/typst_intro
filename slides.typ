@@ -1,6 +1,4 @@
-#import "@preview/polylux:0.3.1": *
-#import themes.clean: *
-
+#import "@preview/polylux:0.4.0": *
 // ------------------------------------------------------------------------------------------------
 
 #let UL_RED = rgb("#ca0123")
@@ -11,7 +9,7 @@
 
 #set text(font: "Arial", size: 22pt)
 // #set page(paper: "presentation-4-3")
-#set page(paper: "presentation-16-9")
+#set page(paper: "presentation-16-9", footer: text(fill: UL_RED, weight: "semibold")[Safety. Science. Transformation.™])
 
 #let myslide(title, body) = {
   slide[
@@ -25,21 +23,21 @@
 
 // ------------------------------------------------------------------------------------------------
 
-#if UL_BRANDED {
-  show: clean-theme.with(
-    footer: text(fill: UL_RED, weight: "semibold")[Safety. Science. Transformation.™],
-    short-title: [Intro to TYPST],
-    logo: image("media_private/UL_Logo.png"),
-    color: UL_RED
-  )
-} else {
-  show: clean-theme.with(
-    footer: text(fill: TYPST_TURQUOISE, weight: "semibold")[\#SWEC24],
-    short-title: [Intro to TYPST],
-    // logo: image("media/Typst_Logo.png"),
-    color: TYPST_TURQUOISE
-  )
-}
+// #if UL_BRANDED {
+//   show: clean-theme.with(
+//     footer: text(fill: UL_RED, weight: "semibold")[Safety. Science. Transformation.™],
+//     short-title: [Intro to TYPST],
+//     logo: image("media_private/UL_Logo.png"),
+//     color: UL_RED
+//   )
+// } else {
+//   show: clean-theme.with(
+//     footer: text(fill: TYPST_TURQUOISE, weight: "semibold")[\#SWEC24],
+//     short-title: [Intro to TYPST],
+//     // logo: image("media/Typst_Logo.png"),
+//     color: TYPST_TURQUOISE
+//   )
+// }
 
 #show "TYPST": it => {
   set text(font: "Verdana", weight: "semibold", fill: TYPST_TURQUOISE)
@@ -72,18 +70,20 @@
 }
 
 // ------------------------------------------------------------------------------------------------
-
-#title-slide(
-  title: "TYPST",
-  subtitle: "An Introduction",
-  authors: "Jörg Planner",
-  date: PRESENT_DATE,
-  watermark: [],
-  secondlogo: []
-)
+#slide[
+  == TYPST
+]
+// #title-slide(
+//   title: "TYPST",
+//   subtitle: "An Introduction",
+//   authors: "Jörg Planner",
+//   date: PRESENT_DATE,
+//   watermark: [],
+//   secondlogo: []
+// )
 
 #if SHOW_INSTALLATION {
-  new-section-slide[Installation & Setup]
+  // new-section-slide[Installation & Setup]
 
   myslide("Installation")[
     To install typst we will just use `winget`:
@@ -115,7 +115,7 @@
   ]
 }
 
-#new-section-slide[Basics]
+// #new-section-slide[Basics]
 
 #myslide("Simple Text")[
   ```typ-show
@@ -165,7 +165,7 @@
   ```
 ]
 
-#new-section-slide[Scripting]
+// #new-section-slide[Scripting]
 
 #myslide("Variables and Conditionals")[
   #only(1)[
@@ -263,7 +263,7 @@
   ```
 ]
 
-#new-section-slide[Other]
+// #new-section-slide[Other]
 
 #myslide("Spacing")[
   ```typ-show
@@ -311,10 +311,10 @@
   ```
 ]
 
-#new-section-slide[
-  #link("https://typst.app/docs/reference")[Documentation]\
-  &\
-  Live Demo
-]
+// #new-section-slide[
+//   #link("https://typst.app/docs/reference")[Documentation]\
+//   &\
+//   Live Demo
+// ]
 
-#new-section-slide[Questions?]
+// #new-section-slide[Questions?]
