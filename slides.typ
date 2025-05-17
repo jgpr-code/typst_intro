@@ -4,40 +4,58 @@
 #let UL_RED = rgb("#ca0123")
 #let UL_BRANDED = false
 #let TYPST_TURQUOISE = rgb("#239dae")
-#let PRESENT_DATE = datetime(year: 2024, month: 12, day: 6).display()
-#let SHOW_INSTALLATION = false
+#let PRESENT_DATE = datetime(year: 2025, month: 5, day: 17).display()
+#let SHOW_INSTALLATION = true
 
 #set text(font: "Arial", size: 22pt)
-// #set page(paper: "presentation-4-3")
-#set page(paper: "presentation-16-9", footer: text(fill: UL_RED, weight: "semibold")[Safety. Science. Transformation.™])
+#let footer = if UL_BRANDED {
+  text(fill: UL_RED, weight: "semibold")[Safety. Science. Transformation.™]
+} else {
+  text(fill: TYPST_TURQUOISE, weight: "semibold")[\#SWEC25]
+}
+#show: set page(
+  paper: "presentation-16-9", // "presentation-4-3"
+  footer: footer,
+)
 
 #let myslide(title, body) = {
   slide[
     #stack(
       heading(level: 2, title),
-      v(0.25em)
+      v(0.25em),
     )
     #body
   ]
 }
 
-// ------------------------------------------------------------------------------------------------
+#let title_slide(title, subtitle, author) = {
+  show: it => {
+    set align(center + horizon)
+    set page(footer: none)
+    it
+  }
+  show heading: set text(size: 50pt)
+  slide[
+    = #title
+    #text(size: 25pt, subtitle)
+    #v(1em)
+    Jörg Planner\
+    #PRESENT_DATE
+  ]
+}
 
-// #if UL_BRANDED {
-//   show: clean-theme.with(
-//     footer: text(fill: UL_RED, weight: "semibold")[Safety. Science. Transformation.™],
-//     short-title: [Intro to TYPST],
-//     logo: image("media_private/UL_Logo.png"),
-//     color: UL_RED
-//   )
-// } else {
-//   show: clean-theme.with(
-//     footer: text(fill: TYPST_TURQUOISE, weight: "semibold")[\#SWEC24],
-//     short-title: [Intro to TYPST],
-//     // logo: image("media/Typst_Logo.png"),
-//     color: TYPST_TURQUOISE
-//   )
-// }
+#let section_slide(title) = {
+  show heading: it => {
+    set align(center + horizon)
+    set text(size: 35pt)
+    it
+  }
+  slide[
+    = #title
+  ]
+}
+
+// ------------------------------------------------------------------------------------------------
 
 #show "TYPST": it => {
   set text(font: "Verdana", weight: "semibold", fill: TYPST_TURQUOISE)
@@ -62,27 +80,23 @@
     columns: (1fr, 1fr),
     align: (center, center),
     raw(align: start, block: true, it.text, lang: "typ"),
-    rect(radius: 10pt, inset: 15pt, {
-      set text(font: "Arial", size: 16pt)
-      set align(start)
-      eval(it.text, mode: "markup")})
+    rect(
+      radius: 10pt,
+      inset: 15pt,
+      {
+        set text(font: "Arial", size: 16pt)
+        set align(start)
+        eval(it.text, mode: "markup")
+      },
+    ),
   )
 }
 
 // ------------------------------------------------------------------------------------------------
-#slide[
-  == TYPST
-]
-// #title-slide(
-//   title: "TYPST",
-//   subtitle: "An Introduction",
-//   authors: "Jörg Planner",
-//   date: PRESENT_DATE,
-//   watermark: [],
-//   secondlogo: []
-// )
+#title_slide("TYPST", "An Introduction", "Jörg Planner")
 
 #if SHOW_INSTALLATION {
+  section_slide[Installation & Setup]
   // new-section-slide[Installation & Setup]
 
   myslide("Installation")[
@@ -98,24 +112,12 @@
     C:\Users\26383> echo Hello World > first.typ
     C:\Users\26383> typst compile first.typ
     ```
-  ]
 
-  myslide("VS Code Extensions")[
-    I recommend using VS Code and installing the following extensions:
-    #grid(
-      columns: (1fr, 1fr),
-      align: (center, center),
-      [
-        #scale(x: 150%, y: 150%, reflow: true, image("media/Typst_LSP.png"))
-      ],
-      [
-        #scale(x: 150%, y: 150%, reflow: true, image("media/VSCode_Pdf.png"))
-      ]
-    )
+    Get the "Tinymist Typst" extension for VS Code for nice IDE experience!
   ]
 }
 
-// #new-section-slide[Basics]
+#section_slide[Basics]
 
 #myslide("Simple Text")[
   ```typ-show
@@ -165,7 +167,15 @@
   ```
 ]
 
-// #new-section-slide[Scripting]
+#myslide("Images")[
+  ```typ-show
+  Its also easy to display images:
+
+  #image("media/logo.png", width: 70%)
+  ```
+]
+
+#section_slide[Scripting]
 
 #myslide("Variables and Conditionals")[
   #only(1)[
@@ -263,7 +273,7 @@
   ```
 ]
 
-// #new-section-slide[Other]
+#section_slide[Layout]
 
 #myslide("Spacing")[
   ```typ-show
@@ -296,6 +306,8 @@
   ```
 ]
 
+#section_slide[Fun]
+
 #myslide("Colors")[
   ```typ-show
   #let ul = rgb("#ca0123")
@@ -311,10 +323,10 @@
   ```
 ]
 
-// #new-section-slide[
-//   #link("https://typst.app/docs/reference")[Documentation]\
-//   &\
-//   Live Demo
-// ]
+#section_slide[
+  #link("https://typst.app/docs/reference")[Documentation]\
+  &\
+  Live Demo
+]
 
-// #new-section-slide[Questions?]
+#section_slide[Questions?]
